@@ -1,0 +1,10 @@
+ARG FAISS_VERSION
+FROM faiss:${FAISS_VERSION}
+
+LABEL maintainer=binwei.yang@gmail.com
+
+WORKDIR /opt/faiss
+COPY ./requirements.txt .
+RUN pip3 install -r ./requirements.txt
+
+RUN pip3 install jupyter
