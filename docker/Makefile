@@ -13,11 +13,19 @@ file := 'VERSION'
 VERSION := $(shell cat ${file})
 
 container:
-	docker build --pull -t $(IMAGE_NAME) -f ${DOCKER_FILE} .
+	docker build --pull \
+	--build-arg CUDA_DEV_VERSION=8.0-devel-ubuntu16.04 \
+	--build-arg CUDA_RUNTIME_VERSION=8.0-runtime-ubuntu16.04 \
+	-t $(IMAGE_NAME) -f ${DOCKER_FILE} .
 	docker tag $(IMAGE_NAME) $(IMAGE_NAME):$(VERSION)
 
 save: container
 	docker save -o $(IMAGE_NAME).tar $(IMAGE_NAME)
+
+run_gpu: container
+	docker run --runtime nvidia --rm -it \
+	-v /usr/local/cuda-8.0/targets/x86_64-linux/lib:/usr/local/cuda-8.0/targets/x86_64-linux/lib \
+	$(IMAGE_NAME):$(VERSION) /bin/bash
 
 jupyter: container
 	docker build --build-arg FAISS_VERSION=$(VERSION) -t $(JUPYTER_IMAGE_NAME) -f ${JUPYTER_DOCKER_FILE} .

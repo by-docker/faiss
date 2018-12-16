@@ -1,4 +1,5 @@
-FROM nvidia/cuda:8.0-devel-ubuntu16.04 as binary_build
+ARG CUDA_DEV_VERSION
+FROM nvidia/cuda:${CUDA_DEV_VERSION} as binary_build
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -23,7 +24,8 @@ RUN cd gpu && make -j $(nproc)
 
 RUN cd python && make _swigfaiss_gpu.so && cp swigfaiss_gpu.py _swigfaiss_gpu.so faiss
 
-FROM nvidia/cuda:8.0-runtime-ubuntu16.04
+ARG CUDA_RUNTIME_VERSION
+FROM nvidia/cuda:${CUDA_RUNTIME_VERSION}
 
 LABEL maintainer=binwei.yang@gmail.com
 

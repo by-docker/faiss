@@ -13,7 +13,7 @@ the GPU option. Python 3.5.2 is used.
 docker run --rm faiss python /opt/faiss/tests/test_build_blocks.py
 # run on GPU
 docker run --runtime nvidia --rm \
--v /usr/local/cuda-9.0/targets/x86_64-linux/lib:/usr/local/cuda-9.0/targets/x86_64-linux/lib \
+-v /usr/local/cuda-8.0/targets/x86_64-linux/lib:/usr/local/cuda-8.0/targets/x86_64-linux/lib \
 faiss python -c 'import faiss; print(faiss.get_num_gpus());'
 ```
 
