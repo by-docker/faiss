@@ -1,4 +1,6 @@
 ARG CUDA_DEV_VERSION
+ARG CUDA_RUNTIME_VERSION
+
 FROM nvidia/cuda:${CUDA_DEV_VERSION} as binary_build
 
 RUN apt-get -y update
@@ -24,7 +26,6 @@ RUN cd gpu && make -j $(nproc)
 
 RUN cd python && make _swigfaiss_gpu.so && cp swigfaiss_gpu.py _swigfaiss_gpu.so faiss
 
-ARG CUDA_RUNTIME_VERSION
 FROM nvidia/cuda:${CUDA_RUNTIME_VERSION}
 
 LABEL maintainer=binwei.yang@gmail.com
